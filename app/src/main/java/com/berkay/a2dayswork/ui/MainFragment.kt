@@ -5,56 +5,93 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.berkay.a2dayswork.R
+import com.berkay.a2dayswork.adapter.CategoriesAdapter
+import com.berkay.a2dayswork.data.entity.CMaker
+import com.berkay.a2dayswork.databinding.FragmentMainBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MainFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MainFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    private lateinit var binding: FragmentMainBinding
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var categoriesAdapter: CategoriesAdapter
+    private val categories = mutableListOf<CMaker>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
+
+
+        binding.addButton.setOnClickListener{
+            AddCategoryDialog()
+        }
+
+        binding.deleteButton.setOnClickListener{
+            DeleteCategoryDialog()
+        }
+
+        categories.add(CMaker(categoryname = "Note"))
+
+        recyclerView = binding.categoriesRecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this.context)
+
+        categoriesAdapter = CategoriesAdapter(categories)
+
+        recyclerView.adapter = categoriesAdapter
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MainFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MainFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    private fun AddCategoryDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Add Category")
+
+        val input = EditText(requireContext())
+        val lp = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        input.layoutParams = lp
+        builder.setView(input)
+
+        builder.setPositiveButton("Add") { _, _ ->
+            val categoryName = input.text.toString()
+            if (categoryName.length in 2..10) {
+                val formattedCategoryName = capitalizeFirstLetter(categoryName)
+                categories.add(CMaker(categoryname = formattedCategoryName))
+                categoriesAdapter.notifyDataSetChanged() // Adapter'a yeni veri eklendiğinde güncelleme yapılır
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "The category name must be between 2 and 10 characters.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
+        }
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.cancel()
+        }
+        builder.show()
     }
+
+
+    private fun capitalizeFirstLetter(input: String): String {
+        return input.substring(0, 1).toUpperCase() + input.substring(1)
+    }
+
+
+    private fun DeleteCategoryDialog(){
+
+    }
+
+    data class Categories(val category: String)
 }
