@@ -16,9 +16,9 @@
     </fragment>
     <fragment
         android:id="@+id/secondScreenFragment"
-        android:name="com.berkay.a2dayswork.ui.SecondScreenFragment"
+        android:name="com.berkay.a2dayswork.ui.RoutineFragment"
         android:label="fragment_second_screen"
-        tools:layout="@layout/fragment_second_screen" >
+        tools:layout="@layout/fragment_routine" >
         <argument
             android:name="toDo"
             app:argType="com.berkay.a2dayswork.data.entity.CMaker" />
