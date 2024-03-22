@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.berkay.a2dayswork.R
 import com.berkay.a2dayswork.adapter.CategoriesAdapter
 import com.berkay.a2dayswork.data.entity.CMaker
+import com.berkay.a2dayswork.database.dbhelper
 import com.berkay.a2dayswork.databinding.FragmentMainBinding
 
 
@@ -23,12 +24,15 @@ class MainFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var categoriesAdapter: CategoriesAdapter
     private val categories = mutableListOf<CMaker>()
+    private lateinit var db: dbhelper
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentMainBinding.inflate(inflater, container, false)
+
+        db = dbhelper(requireContext())
 
 
         binding.addButton.setOnClickListener{
@@ -68,6 +72,7 @@ class MainFragment : Fragment() {
             if (categoryName.length in 2..10) {
                 val formattedCategoryName = capitalizeFirstLetter(categoryName)
                 categories.add(CMaker(categoryname = formattedCategoryName))
+                db.insertData(CMaker())
                 categoriesAdapter.notifyDataSetChanged() // Adapter'a yeni veri eklendiğinde güncelleme yapılır
             } else {
                 Toast.makeText(
