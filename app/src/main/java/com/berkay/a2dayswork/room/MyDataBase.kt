@@ -1,4 +1,14 @@
 package com.berkay.a2dayswork.room
 
-class MyDataBase {
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import com.berkay.a2dayswork.data.entity.CMaker
+import com.berkay.a2dayswork.data.entity.RMaker
+
+@Database(entities = [CMaker::class, RMaker::class], version = 2, exportSchema = false)
+abstract class MyDataBase :RoomDatabase() {
+
+    abstract fun getcategoryDao(): CategoryDao
+
+    abstract fun getroutineDao(): RoutineDao
 }

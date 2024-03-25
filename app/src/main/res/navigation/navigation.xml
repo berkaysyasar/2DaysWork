@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.berkay.a2dayswork.ui.MainFragment"
+        android:name="com.berkay.a2dayswork.ui.fragment.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/secondScreenFragment"
-        android:name="com.berkay.a2dayswork.ui.RoutineFragment"
+        android:name="com.berkay.a2dayswork.ui.fragment.RoutineFragment"
         android:label="fragment_second_screen"
         tools:layout="@layout/fragment_routine" >
         <argument

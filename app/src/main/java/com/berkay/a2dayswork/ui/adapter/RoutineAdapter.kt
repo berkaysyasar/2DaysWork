@@ -1,32 +1,100 @@
-package com.berkay.a2dayswork.adapter
+package com.berkay.a2dayswork.ui.adapter
 
+import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.berkay.a2dayswork.R
 import com.berkay.a2dayswork.data.entity.RMaker
+import com.berkay.a2dayswork.databinding.RoutineDesignBinding
+import com.berkay.a2dayswork.ui.viewmodel.RoutineViewModel
+import com.google.android.material.snackbar.Snackbar
 
-class RoutineAdapter(private val routine : MutableList<RMaker>) : RecyclerView.Adapter<RoutineAdapter.RoutineHolder>() {
+class RoutineAdapter(var mContext:Context, var routineList: MutableList<RMaker>, var viewModel: RoutineViewModel) :
+        RecyclerView.Adapter<RoutineAdapter.ViewHolder>() {
 
-    inner class RoutineHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val routineName : TextView = itemView.findViewById(R.id.routineTextView)
-        val routineTime : TextView = itemView.findViewById(R.id.routinetimeTextView)
-    }
+    inner class ViewHolder(var binding: RoutineDesignBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoutineHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.routine_design, parent, false)
-        return RoutineHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: RoutineHolder, position: Int) {
-        val routineItem = routine[position]
-        holder.routineName.text = routineItem.routineName
-        holder.routineTime.text = routineItem.routineTime
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = RoutineDesignBinding.inflate(LayoutInflater.from(mContext), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
-        return routine.size
+        return routineList.size
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val routines = routineList[position]
+        val design = holder.binding
+
+        design.routineCardView.setOnLongClickListener{
+            val builder = AlertDialog.Builder(this.mContext)
+            builder.setTitle("Edit Routine")
+
+            val layout = LinearLayout(this.mContext)
+            layout.orientation = LinearLayout.VERTICAL
+
+            val category = EditText(this.mContext)
+            category.setText(routines.routinename)
+
+            val inputRoutineLayoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+
+            category.layoutParams = inputRoutineLayoutParams
+            layout.addView(category)
+
+            builder.setView(layout)
+
+            builder.setPositiveButton("Update") { _, _ ->
+
+                viewModel.update(routines.id, category.text.toString(), routines.routinetime, 0)
+            }
+            builder.setNegativeButton("Delete") { dialog, _ ->
+                viewModel.delete(routines.id)
+                dialog.cancel()
+            }
+            builder.show()
+            true
+        }
+
+        design.routineTextView.text = routines.routinename
+        design.routinetimeTextView.text = routines.routinetime
+
+        design.routineTextView.setBackgroundColor(Color.TRANSPARENT)
+        design.routinetimeTextView.setBackgroundColor(Color.TRANSPARENT)
+
+        if (routines.isDone == 1) {
+            design.rotdesignconstraintlayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.green))
+
+        } else {
+            design.rotdesignconstraintlayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.maincolor))
+
+        }
+
+
+        design.routineimageView.setOnClickListener {
+            viewModel.markasdone(routines.id)
+
+            viewModel.update(routines.id, routines.routinename, routines.routinetime, routines.isDone)
+
+            // Veriyi güncelledikten sonra ViewHolder'ı güncelle
+            // notifyDataSetChanged() kullanmak yerine bu yöntemi kullanmak daha iyidir
+            notifyItemChanged(position)
+
+            /*val constraintLayout = design.rotdesignconstraintlayout
+            constraintLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.green))*/
+        }
     }
 }

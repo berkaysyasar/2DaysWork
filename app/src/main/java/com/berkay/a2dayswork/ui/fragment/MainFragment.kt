@@ -1,4 +1,4 @@
-package com.berkay.a2dayswork.ui
+package com.berkay.a2dayswork.ui.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,24 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.berkay.a2dayswork.R
-import com.berkay.a2dayswork.adapter.CategoriesAdapter
+import com.berkay.a2dayswork.ui.adapter.CategoriesAdapter
 import com.berkay.a2dayswork.data.entity.CMaker
-import com.berkay.a2dayswork.database.dbhelper
 import com.berkay.a2dayswork.databinding.FragmentMainBinding
+import com.berkay.a2dayswork.ui.adapter.RoutineAdapter
+import com.berkay.a2dayswork.ui.viewmodel.MainViewModel
+import com.berkay.a2dayswork.ui.viewmodel.RoutineViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 
+@AndroidEntryPoint
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var categoriesAdapter: CategoriesAdapter
-    private val categories = mutableListOf<CMaker>()
-    private lateinit var db: dbhelper
+    private lateinit var viewModel : MainViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,71 +33,53 @@ class MainFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        db = dbhelper(requireContext())
+        // Oluşturun
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        viewModel.categorList.observe(viewLifecycleOwner){
+            val categoryAdapter = CategoriesAdapter(requireContext(),it,viewModel)
+            binding.categoriesRecyclerView.adapter = categoryAdapter
+        }
+
+        binding.categoriesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
 
         binding.addButton.setOnClickListener{
-            AddCategoryDialog()
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Add Category")
+
+            val layout = LinearLayout(requireContext())
+            layout.orientation = LinearLayout.VERTICAL
+
+            val category = EditText(requireContext())
+            category.hint = "Category Name"
+            val inputRoutineLayoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+
+            category.layoutParams = inputRoutineLayoutParams
+            layout.addView(category)
+
+            builder.setView(layout)
+
+            builder.setPositiveButton("Add") { _, _ ->
+                val name = capitalizeFirstLetter(category.text.toString())
+                viewModel.save(name)
+            }
+            builder.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+            builder.show()
         }
 
-        binding.deleteButton.setOnClickListener{
-            DeleteCategoryDialog()
-        }
-
-        categories.add(CMaker(categoryname = "Note"))
-
-        recyclerView = binding.categoriesRecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(this.context)
-
-        categoriesAdapter = CategoriesAdapter(categories)
-
-        recyclerView.adapter = categoriesAdapter
 
         return binding.root
     }
-
-    private fun AddCategoryDialog() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Add Category")
-
-        val input = EditText(requireContext())
-        val lp = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT
-        )
-        input.layoutParams = lp
-        builder.setView(input)
-
-        builder.setPositiveButton("Add") { _, _ ->
-            val categoryName = input.text.toString()
-            if (categoryName.length in 2..10) {
-                val formattedCategoryName = capitalizeFirstLetter(categoryName)
-                categories.add(CMaker(categoryname = formattedCategoryName))
-                db.insertData(CMaker())
-                categoriesAdapter.notifyDataSetChanged() // Adapter'a yeni veri eklendiğinde güncelleme yapılır
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "The category name must be between 2 and 10 characters.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-        builder.setNegativeButton("Cancel") { dialog, _ ->
-            dialog.cancel()
-        }
-        builder.show()
-    }
-
-
     private fun capitalizeFirstLetter(input: String): String {
         return input.substring(0, 1).toUpperCase() + input.substring(1)
     }
 
 
-    private fun DeleteCategoryDialog(){
-
-    }
-
-    data class Categories(val category: String)
 }
+

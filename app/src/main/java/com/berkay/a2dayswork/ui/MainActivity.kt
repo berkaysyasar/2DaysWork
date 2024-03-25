@@ -15,9 +15,13 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.berkay.a2dayswork.R
 import com.berkay.a2dayswork.databinding.ActivityMainBinding
+import com.berkay.a2dayswork.ui.fragment.MainFragment
+import com.berkay.a2dayswork.ui.fragment.RoutineFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     lateinit var toggle: ActionBarDrawerToggle
