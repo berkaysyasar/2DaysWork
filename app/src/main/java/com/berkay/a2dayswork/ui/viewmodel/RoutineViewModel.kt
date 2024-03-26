@@ -37,7 +37,7 @@ class RoutineViewModel @Inject constructor(var routineRepo: routineRepo) : ViewM
 
     fun update(id:Int, name:String, time:String, isdone:Int){
         CoroutineScope(Dispatchers.Main).launch {
-            routineRepo.update(id, name, time, 1)
+            routineRepo.update(id, name, time, isdone)
             loadRoutines()
         }
     }
@@ -48,6 +48,7 @@ class RoutineViewModel @Inject constructor(var routineRepo: routineRepo) : ViewM
             loadRoutines()
         }
     }
+
 
     fun loadRoutines(){
         CoroutineScope(Dispatchers.Main).launch {

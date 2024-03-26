@@ -1,7 +1,6 @@
 package com.berkay.a2dayswork.ui.fragment
 
 import android.app.TimePickerDialog
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,17 +12,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.berkay.a2dayswork.ui.adapter.RoutineAdapter
-import com.berkay.a2dayswork.data.entity.RMaker
 import com.berkay.a2dayswork.databinding.FragmentRoutineBinding
-import com.berkay.a2dayswork.ui.viewmodel.MainViewModel
 import com.berkay.a2dayswork.ui.viewmodel.RoutineViewModel
-import com.google.android.material.internal.ViewUtils.dpToPx
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Calendar
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
@@ -79,9 +76,18 @@ class RoutineFragment : Fragment() {
             builder.setView(layout)
 
             builder.setPositiveButton("Add") { _, _ ->
-                val name = capitalizeFirstLetter(inputRoutine.text.toString())
-                val time = inputTime.text.toString()
-                viewModel.save(name,time)
+                val inputText = inputRoutine.text.toString()
+                if (inputText.isNotEmpty()) {
+                    val name = capitalizeFirstLetter(inputText)
+                    val time = inputTime.text.toString()
+                    if (name.length in 2..20 && time.isNotEmpty()) {
+                        viewModel.save(name, time)
+                    } else {
+                        Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Routine name and time cannot be empty", Toast.LENGTH_SHORT).show()
+                }
             }
             builder.setNegativeButton("Cancel") { dialog, _ ->
                 dialog.cancel()

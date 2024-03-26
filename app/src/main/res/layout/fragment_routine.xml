@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/maincolor"
+        android:backgroundTint="#1D32AA"
         android:clickable="true"
         android:src="@drawable/add_ic"
         app:layout_constraintBottom_toBottomOf="@+id/routineRecyclerView"

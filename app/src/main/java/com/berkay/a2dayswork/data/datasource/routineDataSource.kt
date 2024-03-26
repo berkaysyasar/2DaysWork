@@ -23,7 +23,7 @@ class routineDataSource(var routineDao: RoutineDao) {
 
     suspend fun markasdone(id:Int,routinename:String, routinetime:String){
         val updateRoutine = RMaker(id, routinename, routinetime,1)
-        routineDao.update(updateRoutine)
+        routineDao.markasdone(updateRoutine)
     }
 
     suspend fun loadRoutines(): MutableList<RMaker> = withContext(Dispatchers.IO){

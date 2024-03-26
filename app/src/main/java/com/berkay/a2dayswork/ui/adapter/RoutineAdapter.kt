@@ -37,6 +37,7 @@ class RoutineAdapter(var mContext:Context, var routineList: MutableList<RMaker>,
         val routines = routineList[position]
         val design = holder.binding
 
+
         design.routineCardView.setOnLongClickListener{
             val builder = AlertDialog.Builder(this.mContext)
             builder.setTitle("Edit Routine")
@@ -72,29 +73,28 @@ class RoutineAdapter(var mContext:Context, var routineList: MutableList<RMaker>,
         design.routineTextView.text = routines.routinename
         design.routinetimeTextView.text = routines.routinetime
 
-        design.routineTextView.setBackgroundColor(Color.TRANSPARENT)
-        design.routinetimeTextView.setBackgroundColor(Color.TRANSPARENT)
 
         if (routines.isDone == 1) {
             design.rotdesignconstraintlayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.green))
 
-        } else {
+        } else{
             design.rotdesignconstraintlayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.maincolor))
-
         }
 
 
         design.routineimageView.setOnClickListener {
-            viewModel.markasdone(routines.id)
-
-            viewModel.update(routines.id, routines.routinename, routines.routinetime, routines.isDone)
-
-            // Veriyi güncelledikten sonra ViewHolder'ı güncelle
-            // notifyDataSetChanged() kullanmak yerine bu yöntemi kullanmak daha iyidir
-            notifyItemChanged(position)
-
-            /*val constraintLayout = design.rotdesignconstraintlayout
-            constraintLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.green))*/
+            if (routines.isDone == 0){
+                routines.isDone = 1
+                viewModel.markasdone(routines.id)
+                viewModel.update(routines.id, routines.routinename, routines.routinetime, routines.isDone)
+                notifyItemChanged(position)
+            } else {
+                Snackbar.make(design.root,"Routine is already done. Are you sure you want to mark it as undone?", Snackbar.LENGTH_LONG).setAction("Undo"){
+                    routines.isDone = 0
+                    viewModel.update(routines.id, routines.routinename, routines.routinetime, routines.isDone)
+                    notifyItemChanged(position)
+                }.show()
+            }
         }
     }
 }
