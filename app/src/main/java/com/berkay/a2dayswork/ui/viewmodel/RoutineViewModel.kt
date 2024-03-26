@@ -49,7 +49,6 @@ class RoutineViewModel @Inject constructor(var routineRepo: routineRepo) : ViewM
         }
     }
 
-
     fun loadRoutines(){
         CoroutineScope(Dispatchers.Main).launch {
             routineList.value = routineRepo.loadRoutine()

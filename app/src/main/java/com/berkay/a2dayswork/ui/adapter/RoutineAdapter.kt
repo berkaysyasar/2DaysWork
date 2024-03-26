@@ -96,5 +96,9 @@ class RoutineAdapter(var mContext:Context, var routineList: MutableList<RMaker>,
                 }.show()
             }
         }
+        
     }
+
+
+
 }

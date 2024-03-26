@@ -97,8 +97,8 @@ class RoutineFragment : Fragment() {
         }
 
         return binding.root
-    }
 
+    }
 
     private fun showTimePickerDialog(inputTime: EditText) {
         val cal = Calendar.getInstance()
