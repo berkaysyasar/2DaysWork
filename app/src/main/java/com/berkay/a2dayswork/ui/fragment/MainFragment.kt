@@ -10,8 +10,10 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.berkay.a2dayswork.R
 import com.berkay.a2dayswork.ui.adapter.CategoriesAdapter
 import com.berkay.a2dayswork.data.entity.CMaker
 import com.berkay.a2dayswork.databinding.FragmentMainBinding

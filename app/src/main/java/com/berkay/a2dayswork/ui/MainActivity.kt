@@ -13,6 +13,7 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.ContextCompat
@@ -27,8 +28,10 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.berkay.a2dayswork.R
 import com.berkay.a2dayswork.databinding.ActivityMainBinding
+import com.berkay.a2dayswork.ui.fragment.AboutFragment
 import com.berkay.a2dayswork.ui.fragment.MainFragment
 import com.berkay.a2dayswork.ui.fragment.RoutineFragment
+import com.berkay.a2dayswork.ui.fragment.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,10 +67,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        val headerView = navView.getHeaderView(0)
+        val menuCloseImageView = headerView.findViewById<ImageView>(R.id.menucloseImageView)
+
+        menuCloseImageView.setOnClickListener{
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+
         toggle = ActionBarDrawerToggle(this,drawerLayout, R.string.open, R.string.close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         navView.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_home -> {
@@ -77,14 +88,19 @@ class MainActivity : AppCompatActivity() {
                     bottomNavigationView.selectedItemId = R.id.homeItem
                     true
                 }
-                R.id.menucloseImageView -> {
-                    val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
+                R.id.nav_settings -> {
+                    replaceFragment(SettingsFragment())
                     drawerLayout.closeDrawer(GravityCompat.START)
-                    true
+                }
+                R.id.nav_about ->{
+                    replaceFragment(AboutFragment())
+                    drawerLayout.closeDrawer(GravityCompat.START)
                 }
             }
             true
         }
+
+
 
         val menuItem = navView.menu.findItem(R.id.nav_contact)
         // MenuItem'i bir SpannableString'e dönüştürün

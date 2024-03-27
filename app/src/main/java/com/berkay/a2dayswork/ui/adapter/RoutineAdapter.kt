@@ -18,7 +18,9 @@ import com.berkay.a2dayswork.databinding.RoutineDesignBinding
 import com.berkay.a2dayswork.ui.viewmodel.RoutineViewModel
 import com.google.android.material.snackbar.Snackbar
 
-class RoutineAdapter(var mContext:Context, var routineList: MutableList<RMaker>, var viewModel: RoutineViewModel) :
+class RoutineAdapter(var mContext:Context,
+                     var routineList: MutableList<RMaker>,
+                     var viewModel: RoutineViewModel) :
         RecyclerView.Adapter<RoutineAdapter.ViewHolder>() {
 
     inner class ViewHolder(var binding: RoutineDesignBinding) :

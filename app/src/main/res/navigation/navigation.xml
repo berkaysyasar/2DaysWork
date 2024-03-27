@@ -13,6 +13,13 @@
         <action
             android:id="@+id/action_mainFragment_to_secondScreenFragment"
             app:destination="@id/secondScreenFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <argument
+            android:name="isAddButtonVisible"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
     <fragment
         android:id="@+id/secondScreenFragment"
@@ -22,5 +29,18 @@
         <argument
             android:name="toDo"
             app:argType="com.berkay.a2dayswork.data.entity.CMaker" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.berkay.a2dayswork.ui.fragment.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <argument
+            android:name="isAddButtonVisible"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
 </navigation>

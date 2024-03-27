@@ -2,6 +2,7 @@ package com.berkay.a2dayswork.ui.fragment
 
 import RoutineWorker
 import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -102,6 +103,10 @@ class RoutineFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.loadRoutines()
+        viewModel.routineList.observe(viewLifecycleOwner) { routines ->
+            val routineAdapter = RoutineAdapter(requireContext(), routines, viewModel)
+            binding.routineRecyclerView.adapter = routineAdapter
+        }
     }
 
     private fun showTimePickerDialog(inputTime: EditText) {

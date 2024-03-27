@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.SettingsFragment"
+    android:background="#5967B8"
+    android:layout_margin="3dp"
+    android:padding="2dp">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="173dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Settings"
+        android:textAlignment="center"
+        android:textColor="@color/textColor2"
+        android:textSize="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/enabledisablebutton"
+        android:layout_width="348dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="36dp"
+        android:backgroundTint="@color/maincolor"
+        android:text="Enable/Disable Buttons"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/themebutton"
+        android:layout_width="348dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/maincolor"
+        android:text="Themes"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/routineaddTextview" />
+
+    <Switch
+        android:id="@+id/noteswitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="104dp"
+        android:checked="true"
+        android:visibility="invisible"
+        android:trackTint="@color/maincolor"
+        android:thumbTint="@color/maincolor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enabledisablebutton" />
+
+    <Switch
+        android:id="@+id/routineswitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:visibility="invisible"
+        android:trackTint="@color/maincolor"
+        android:thumbTint="@color/maincolor"
+        android:checked="true"
+        app:layout_constraintEnd_toEndOf="@+id/noteswitch"
+        app:layout_constraintTop_toBottomOf="@+id/noteswitch" />
+
+    <TextView
+        android:id="@+id/noteaddTextview"
+        android:layout_width="125dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="76dp"
+        android:visibility="invisible"
+        android:text="Note Add Button"
+        android:textColor="@color/textColor2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/noteswitch" />
+
+    <TextView
+        android:id="@+id/routineaddTextview"
+        android:layout_width="125dp"
+        android:layout_height="30dp"
+        android:visibility="invisible"
+        android:text="Routine Add Button"
+        android:textColor="@color/textColor2"
+        app:layout_constraintStart_toStartOf="@+id/noteaddTextview"
+        app:layout_constraintTop_toTopOf="@+id/routineswitch" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
