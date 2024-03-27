@@ -18,7 +18,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.berkay.a2dayswork.R
 import com.berkay.a2dayswork.databinding.ActivityMainBinding
@@ -28,6 +32,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
@@ -35,24 +40,22 @@ class MainActivity : AppCompatActivity() {
     private lateinit var prefs: SharedPreferences
     private lateinit var binding: ActivityMainBinding
     lateinit var toggle: ActionBarDrawerToggle
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // SharedPreferences nesnesini oluştur
-        prefs = applicationContext.getSharedPreferences("RoutineWorkerPrefs", Context.MODE_PRIVATE)
+        startRoutineWorker()
 
-        // Gece saat 12'den sonraki ilk açılışta RoutineWorker'ı çağır
-        callRoutineWorker()
+
 
         val drawerLayout : DrawerLayout = binding.drawerLayout
         val navView : NavigationView = binding.navView
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.selectedItemId = R.id.homeItem
-
 
         binding.menuImageView.setOnClickListener{
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -80,7 +83,6 @@ class MainActivity : AppCompatActivity() {
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
-
             }
             true
         }
@@ -110,26 +112,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun callRoutineWorker() {
-        val isRoutineResetDone: Boolean = prefs.getBoolean("isRoutineResetDone", false)
+    private fun startRoutineWorker() {
+        val workRequest = PeriodicWorkRequestBuilder<RoutineWorker>(
+            repeatInterval = 1,
+            repeatIntervalTimeUnit = TimeUnit.DAYS
+        ).build()
 
-        // Eğer işlem daha önce yapılmadıysa ve uygulama gece saat 12'den sonraki ilk açılışsa
-        if (!isRoutineResetDone && isFirstLaunchAfterMidnight()) {
-            // WorkManager üzerinden iş talebini oluştur
-            val workRequest = OneTimeWorkRequestBuilder<RoutineWorker>().build()
-
-            // Oluşturulan iş talebini WorkManager'a gönder
-            WorkManager.getInstance(applicationContext).enqueue(workRequest)
-        }
-    }
-
-    private fun isFirstLaunchAfterMidnight(): Boolean {
-        val now = Calendar.getInstance()
-        val currentHour = now.get(Calendar.HOUR_OF_DAY)
-        val currentMinute = now.get(Calendar.MINUTE)
-
-        // Eğer saat 00:00'dan sonra ve işlem daha önce yapılmadıysa
-        return currentHour == 0 && currentMinute > 0
+        // Eğer bir önceki iş zaten varsa, bu işi durdur ve tekrar ekle
+        WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
+            "routineWorker",
+            ExistingPeriodicWorkPolicy.REPLACE,
+            workRequest
+        )
     }
 
     private fun replaceFragment(fragment: Fragment){

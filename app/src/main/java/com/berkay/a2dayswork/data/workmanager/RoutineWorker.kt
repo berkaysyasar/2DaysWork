@@ -4,6 +4,9 @@ import androidx.room.Room
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.berkay.a2dayswork.room.MyDataBase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 import java.util.Calendar
 
 class RoutineWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
@@ -11,28 +14,33 @@ class RoutineWorker(context: Context, params: WorkerParameters) : CoroutineWorke
 
     override suspend fun doWork(): Result {
         return try {
+            // Get the current date
+            val currentDate = Calendar.getInstance().time
+            val dateFormat = SimpleDateFormat("yyyyMMdd")
+            val currentDateStr = dateFormat.format(currentDate)
+
+            // Get the shared preferences
             val prefs: SharedPreferences = applicationContext.getSharedPreferences("RoutineWorkerPrefs", Context.MODE_PRIVATE)
 
-            // SharedPreferences'ten işlemin daha önce yapılıp yapılmadığını kontrol et
-            val isRoutineResetDone: Boolean = prefs.getBoolean("isRoutineResetDone", false)
+            // Get the date when the app was last opened
+            val lastOpenedDateStr = prefs.getString("lastOpenedDate", null)
 
-            // Eğer daha önce işlem yapılmamışsa, işlemi gerçekleştir
-            if (!isRoutineResetDone) {
-                // Veritabanını oluştur veya al
-                val database = Room.databaseBuilder(applicationContext, MyDataBase::class.java, "rotuinedb.db").createFromAsset("rotuinedb.db").build()
+            // Check if the current date is different from the last opened date
+            if (lastOpenedDateStr == null || lastOpenedDateStr != currentDateStr) {
+                // Set the last opened date to the current date
+                prefs.edit().putString("lastOpenedDate", currentDateStr).apply()
 
-                // Tüm rutinleri al
-                val routines = database.getroutineDao().loadRoutine()
+                // Set the isDone value of all routines to 0
+                withContext(Dispatchers.IO) {
+                    val database = Room.databaseBuilder(applicationContext, MyDataBase::class.java, "rotuinedb.db").createFromAsset("rotuinedb.db").build()
+                    val routineDao = database.getroutineDao()
+                    val routines = routineDao.loadRoutine()
 
-                // Her rutin için isDone değerini sıfırla ve veritabanına kaydet
-                for (routine in routines) {
-                    routine.isDone = 0
-                    database.getroutineDao().update(routine)
-                    println("Worked")
+                    routines.forEach { routine ->
+                        routine.isDone = 0
+                        routineDao.update(routine)
+                    }
                 }
-
-                // İşlem tamamlandığında SharedPreferences'teki değeri güncelle
-                prefs.edit().putBoolean("isRoutineResetDone", true).apply()
             }
 
             // İşlem başarıyla tamamlandıysa Result.success() döndür
