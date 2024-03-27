@@ -43,7 +43,6 @@ class MainFragment : Fragment() {
 
         binding.categoriesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-
         binding.addButton.setOnClickListener{
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle("Add Category")
@@ -72,14 +71,10 @@ class MainFragment : Fragment() {
             }
             builder.show()
         }
-
-
         return binding.root
     }
     private fun capitalizeFirstLetter(input: String): String {
         return input.substring(0, 1).toUpperCase() + input.substring(1)
     }
-
-
 }
 

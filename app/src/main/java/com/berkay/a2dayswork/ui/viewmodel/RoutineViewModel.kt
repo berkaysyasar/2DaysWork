@@ -14,8 +14,6 @@ import javax.inject.Inject
 @HiltViewModel
 class RoutineViewModel @Inject constructor(var routineRepo: routineRepo) : ViewModel(){
     var routineList = MutableLiveData<MutableList<RMaker>>()
-    private val _updated = MutableLiveData<Boolean>()
-    val updated: LiveData<Boolean> get() = _updated
 
     init {
         loadRoutines()

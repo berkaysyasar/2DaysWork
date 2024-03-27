@@ -1,5 +1,6 @@
 package com.berkay.a2dayswork.ui.fragment
 
+import RoutineWorker
 import android.app.TimePickerDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,8 +13,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
+import com.berkay.a2dayswork.R
 import com.berkay.a2dayswork.ui.adapter.RoutineAdapter
 import com.berkay.a2dayswork.databinding.FragmentRoutineBinding
 import com.berkay.a2dayswork.ui.viewmodel.RoutineViewModel
@@ -27,7 +30,6 @@ import java.util.concurrent.TimeUnit
 class RoutineFragment : Fragment() {
     private lateinit var binding: FragmentRoutineBinding
     private lateinit var viewModel : RoutineViewModel
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,8 +45,8 @@ class RoutineFragment : Fragment() {
             binding.routineRecyclerView.adapter = routineAdapter
         }
 
-        binding.routineRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        binding.routineRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         binding.addRoutineButton.setOnClickListener{
             val builder = AlertDialog.Builder(requireContext())
@@ -93,11 +95,13 @@ class RoutineFragment : Fragment() {
                 dialog.cancel()
             }
             builder.show()
-
         }
-
         return binding.root
+    }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadRoutines()
     }
 
     private fun showTimePickerDialog(inputTime: EditText) {
@@ -121,5 +125,4 @@ class RoutineFragment : Fragment() {
     private fun capitalizeFirstLetter(input: String): String {
         return input.substring(0, 1).toUpperCase() + input.substring(1)
     }
-
 }

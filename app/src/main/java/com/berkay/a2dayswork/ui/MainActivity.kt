@@ -2,6 +2,7 @@ package com.berkay.a2dayswork.ui
 
 import RoutineWorker
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Build
@@ -48,8 +49,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         startRoutineWorker()
-
-
 
         val drawerLayout : DrawerLayout = binding.drawerLayout
         val navView : NavigationView = binding.navView
@@ -103,13 +102,22 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId){
                 R.id.routineItem -> replaceFragment(RoutineFragment())
                 R.id.homeItem -> replaceFragment(MainFragment())
-
                 else -> {
 
                 }
             }
             true
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkDailyRoutine()
+    }
+
+    private fun checkDailyRoutine() {
+        val workRequest = OneTimeWorkRequestBuilder<RoutineWorker>().build()
+        WorkManager.getInstance(applicationContext).enqueue(workRequest)
     }
 
     private fun startRoutineWorker() {

@@ -22,7 +22,6 @@ interface RoutineDao {
     @Update
     suspend fun markasdone(routine : RMaker)
 
-
     @Delete
     suspend fun delete(routine : RMaker)
 }

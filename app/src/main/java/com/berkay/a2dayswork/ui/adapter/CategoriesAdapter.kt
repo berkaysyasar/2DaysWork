@@ -26,7 +26,6 @@ class CategoriesAdapter(var mContext: Context, var categoryList:MutableList<CMak
         return ViewHolder(binding)
     }
 
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val categoryy = categoryList.get(position)
         val design = holder.binding
@@ -68,5 +67,4 @@ class CategoriesAdapter(var mContext: Context, var categoryList:MutableList<CMak
     override fun getItemCount(): Int {
         return categoryList.size
     }
-
 }

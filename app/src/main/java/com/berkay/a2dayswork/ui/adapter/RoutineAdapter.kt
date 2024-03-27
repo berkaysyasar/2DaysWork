@@ -37,7 +37,6 @@ class RoutineAdapter(var mContext:Context, var routineList: MutableList<RMaker>,
         val routines = routineList[position]
         val design = holder.binding
 
-
         design.routineCardView.setOnLongClickListener{
             val builder = AlertDialog.Builder(this.mContext)
             builder.setTitle("Edit Routine")
@@ -59,7 +58,6 @@ class RoutineAdapter(var mContext:Context, var routineList: MutableList<RMaker>,
             builder.setView(layout)
 
             builder.setPositiveButton("Update") { _, _ ->
-
                 viewModel.update(routines.id, category.text.toString(), routines.routinetime, 0)
             }
             builder.setNegativeButton("Delete") { dialog, _ ->
@@ -73,14 +71,11 @@ class RoutineAdapter(var mContext:Context, var routineList: MutableList<RMaker>,
         design.routineTextView.text = routines.routinename
         design.routinetimeTextView.text = routines.routinetime
 
-
         if (routines.isDone == 1) {
             design.rotdesignconstraintlayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.green))
-
         } else{
             design.rotdesignconstraintlayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.maincolor))
         }
-
 
         design.routineimageView.setOnClickListener {
             if (routines.isDone == 0){
@@ -96,9 +91,5 @@ class RoutineAdapter(var mContext:Context, var routineList: MutableList<RMaker>,
                 }.show()
             }
         }
-        
     }
-
-
-
 }
