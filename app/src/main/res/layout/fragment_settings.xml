@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.SettingsFragment"
-    android:background="#5967B8"
+    tools:context=".ui.fragment.menuItems.SettingsFragment"
+    android:background="@color/drawerbackground"
     android:layout_margin="3dp"
     android:padding="2dp">
 
@@ -36,6 +36,7 @@
         android:layout_marginTop="36dp"
         android:backgroundTint="@color/maincolor"
         android:text="Enable/Disable Buttons"
+        android:textColor="@color/textColor2"
         app:cornerRadius="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,6 +48,7 @@
         android:layout_height="56dp"
         android:layout_marginTop="24dp"
         android:backgroundTint="@color/maincolor"
+        android:textColor="@color/textColor2"
         android:text="Themes"
         app:cornerRadius="0dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +62,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="104dp"
-        android:checked="true"
         android:visibility="invisible"
         android:trackTint="@color/maincolor"
         android:thumbTint="@color/maincolor"
@@ -75,7 +76,6 @@
         android:visibility="invisible"
         android:trackTint="@color/maincolor"
         android:thumbTint="@color/maincolor"
-        android:checked="true"
         app:layout_constraintEnd_toEndOf="@+id/noteswitch"
         app:layout_constraintTop_toBottomOf="@+id/noteswitch" />
 

@@ -3,6 +3,7 @@
     <style name="Base.Theme._2DaysWork" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">@color/statusbarcolor</item>
     </style>
 
     <style name="Theme._2DaysWork" parent="Base.Theme._2DaysWork" />

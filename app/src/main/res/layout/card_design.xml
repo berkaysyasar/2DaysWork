@@ -8,15 +8,15 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewRow"
-        android:layout_width="240dp"
-        android:layout_height="50dp"
+        android:layout_width="300dp"
+        android:layout_height="75dp"
         android:layout_margin="16dp"
-        app:cardElevation="5dp"
         android:backgroundTint="@color/maincolor"
-        app:cardCornerRadius="25dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground">
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

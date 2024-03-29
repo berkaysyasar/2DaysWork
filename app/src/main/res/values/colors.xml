@@ -3,8 +3,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="maincolor">#3F51B5</color>
-    <color name="textColor1">#707070</color>
     <color name="textColor2">#FFFFFF</color>
     <color name="green">#8BC34A</color>
     <color name="red">#F44336</color>
+    <color name="drawerbackground">#5967B8</color>
+    <color name="mainbackground">#EEEEEE</color>
+    <color name="addbuttoncolor">#1D32AA</color>
+    <color name="iconcolor">#FF000000</color>
+    <color name="statusbarcolor">#4B5FCF</color>
+    <color name="menuheadtint">#f7f2fa</color>
+    <color name="menuheaderitems">#49454f</color>
 </resources>

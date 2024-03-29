@@ -46,7 +46,6 @@ class RoutineFragment : Fragment() {
             binding.routineRecyclerView.adapter = routineAdapter
         }
 
-
         binding.routineRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         binding.addRoutineButton.setOnClickListener{
@@ -70,12 +69,15 @@ class RoutineFragment : Fragment() {
             inputTime.hint = "Time"
             inputTime.isFocusable = false
 
+            val inputTimeLayoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
 
             inputTime.setOnClickListener {
                 showTimePickerDialog(inputTime)
             }
             layout.addView(inputTime)
-
             builder.setView(layout)
 
             builder.setPositiveButton("Add") { _, _ ->
@@ -83,7 +85,7 @@ class RoutineFragment : Fragment() {
                 if (inputText.isNotEmpty()) {
                     val name = capitalizeFirstLetter(inputText)
                     val time = inputTime.text.toString()
-                    if (name.length in 2..20 && time.isNotEmpty()) {
+                    if (name.length in 2..20) {
                         viewModel.save(name, time)
                     } else {
                         Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
@@ -96,6 +98,16 @@ class RoutineFragment : Fragment() {
                 dialog.cancel()
             }
             builder.show()
+        }
+        val args = arguments
+        val noteSwitchValue = args?.getInt("routineswitch")
+        if (noteSwitchValue == null) {
+            val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+            val isNoteSwitchChecked = sharedPreferences.getBoolean("routineswitch", true)
+            binding.addRoutineButton.visibility = if (isNoteSwitchChecked) View.VISIBLE else View.INVISIBLE
+        } else {
+            // Eğer Bundle'dan değer alınabilirse, bu değere göre işlem yap
+            binding.addRoutineButton.visibility = if (noteSwitchValue == 1) View.VISIBLE else View.INVISIBLE
         }
         return binding.root
     }

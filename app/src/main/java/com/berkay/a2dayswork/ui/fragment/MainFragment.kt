@@ -1,5 +1,6 @@
 package com.berkay.a2dayswork.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -73,6 +74,18 @@ class MainFragment : Fragment() {
             }
             builder.show()
         }
+        val args = arguments
+        val noteSwitchValue = args?.getInt("noteswitch")
+        if (noteSwitchValue == null) {
+            val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+            val isNoteSwitchChecked = sharedPreferences.getBoolean("noteswitch", true)
+            binding.addButton.visibility = if (isNoteSwitchChecked) View.VISIBLE else View.INVISIBLE
+        } else {
+            // Eğer Bundle'dan değer alınabilirse, bu değere göre işlem yap
+            binding.addButton.visibility = if (noteSwitchValue == 1) View.VISIBLE else View.INVISIBLE
+        }
+
+
         return binding.root
     }
     private fun capitalizeFirstLetter(input: String): String {

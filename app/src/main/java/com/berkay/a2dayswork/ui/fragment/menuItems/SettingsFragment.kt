@@ -1,4 +1,4 @@
-package com.berkay.a2dayswork.ui.fragment
+package com.berkay.a2dayswork.ui.fragment.menuItems
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -7,12 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Switch
-import androidx.navigation.fragment.findNavController
-import com.berkay.a2dayswork.R
-import com.berkay.a2dayswork.databinding.FragmentRoutineBinding
 import com.berkay.a2dayswork.databinding.FragmentSettingsBinding
-import com.berkay.a2dayswork.ui.MainActivity
+import com.berkay.a2dayswork.ui.fragment.MainFragment
+import com.berkay.a2dayswork.ui.fragment.RoutineFragment
 
 
 class SettingsFragment : Fragment() {

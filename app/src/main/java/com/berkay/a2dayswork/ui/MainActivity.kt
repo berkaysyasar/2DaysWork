@@ -1,8 +1,6 @@
 package com.berkay.a2dayswork.ui
 
 import RoutineWorker
-import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Build
@@ -20,22 +18,20 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.berkay.a2dayswork.R
 import com.berkay.a2dayswork.databinding.ActivityMainBinding
-import com.berkay.a2dayswork.ui.fragment.AboutFragment
+import com.berkay.a2dayswork.ui.fragment.menuItems.AboutFragment
 import com.berkay.a2dayswork.ui.fragment.MainFragment
 import com.berkay.a2dayswork.ui.fragment.RoutineFragment
-import com.berkay.a2dayswork.ui.fragment.SettingsFragment
+import com.berkay.a2dayswork.ui.fragment.menuItems.DevFragment
+import com.berkay.a2dayswork.ui.fragment.menuItems.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 
@@ -91,26 +87,35 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_settings -> {
                     replaceFragment(SettingsFragment())
                     drawerLayout.closeDrawer(GravityCompat.START)
+                    binding.bottomNavigationView.selectedItemId = 0
                 }
                 R.id.nav_about ->{
                     replaceFragment(AboutFragment())
                     drawerLayout.closeDrawer(GravityCompat.START)
+                    binding.bottomNavigationView.selectedItemId = 0
+                }
+                R.id.nav_aboutdeveloper ->{
+                    replaceFragment(DevFragment())
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    binding.bottomNavigationView.selectedItemId = 0
                 }
             }
             true
         }
 
-
-
         val menuItem = navView.menu.findItem(R.id.nav_contact)
+        val menuItem2 = navView.menu.findItem(R.id.nav_menu)
         // MenuItem'i bir SpannableString'e dönüştürün
         val spannableString = SpannableString(menuItem.title)
-        spannableString.setSpan(AbsoluteSizeSpan(50), 0, spannableString.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        val spannableString2 = SpannableString(menuItem2.title)
+        spannableString.setSpan(AbsoluteSizeSpan(60), 0, spannableString.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        spannableString2.setSpan(AbsoluteSizeSpan(60), 0, spannableString2.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         // Rengi değiştirmek için bir ForegroundColorSpan ekleyin
-        spannableString.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.maincolor)), 0, spannableString.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, spannableString.length, 0)
+        spannableString2.setSpan(StyleSpan(Typeface.BOLD), 0, spannableString2.length, 0)
         // MenuItem'in başlığını güncelleyin
         menuItem.title = spannableString
+        menuItem2.title = spannableString2
 
         replaceFragment(MainFragment())
 
@@ -129,6 +134,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         checkDailyRoutine()
+        println("onResume")
     }
 
     private fun checkDailyRoutine() {

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FFFFFFFF</color>
+    <color name="white">#FF000000</color>
+    <color name="maincolor">#222831</color>
+    <color name="textColor2">#EEEEEE</color>
+    <color name="green">#466126</color>
+    <color name="red">#F44336</color>
+    <color name="drawerbackground">#303845</color>
+    <color name="mainbackground">#303845</color>
+    <color name="addbuttoncolor">#39475E</color>
+    <color name="iconcolor">#FFFFFFFF</color>
+    <color name="statusbarcolor">#394351</color>
+    <color name="menuheadtint">#1c1c22</color>
+    <color name="menuheaderitems">#EEEEEE</color>
+</resources>

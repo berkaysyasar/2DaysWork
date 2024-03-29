@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.DevFragment">
+    tools:context=".ui.fragment.menuItems.DevFragment"
+    android:background="@color/drawerbackground"
+    android:layout_margin="3dp"
+    android:padding="2dp">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/textView"
+        android:layout_width="173dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="32dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Developer"
+        android:textAlignment="center"
+        android:textColor="@color/textColor2"
+        android:textSize="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="360dp"
+        android:layout_height="234dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:text="Hello there, I'm Berkay. Give me feedback on how to make the app better.\n\nberkayyasar0@gmail.com\nlinkedin.com/in/berkaysyasar\ngithub.com/berkaysyasar"
+        android:textColor="@color/textColor2"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"></TextView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

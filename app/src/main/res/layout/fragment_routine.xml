@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.RoutineFragment">
+    tools:context=".ui.fragment.RoutineFragment"
+    android:background="@color/mainbackground">
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -23,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="#1D32AA"
+        android:backgroundTint="@color/addbuttoncolor"
         android:clickable="true"
         android:src="@drawable/add_ic"
         app:layout_constraintBottom_toBottomOf="@+id/routineRecyclerView"

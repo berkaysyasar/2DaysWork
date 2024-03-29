@@ -1,5 +1,6 @@
 package com.berkay.a2dayswork.ui.adapter
 
+import android.app.TimePickerDialog
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.berkay.a2dayswork.R
@@ -17,6 +19,9 @@ import com.berkay.a2dayswork.data.entity.RMaker
 import com.berkay.a2dayswork.databinding.RoutineDesignBinding
 import com.berkay.a2dayswork.ui.viewmodel.RoutineViewModel
 import com.google.android.material.snackbar.Snackbar
+import java.util.Calendar
+import java.util.Locale
+
 
 class RoutineAdapter(var mContext:Context,
                      var routineList: MutableList<RMaker>,
@@ -53,14 +58,23 @@ class RoutineAdapter(var mContext:Context,
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-
             category.layoutParams = inputRoutineLayoutParams
             layout.addView(category)
 
+            val inputTime = EditText(this.mContext)
+            inputTime.setText(routines.routinetime)
+            inputTime.isFocusable = false
+
+
+            inputTime.setOnClickListener {
+                showTimePickerDialog(inputTime)
+            }
+            layout.addView(inputTime)
             builder.setView(layout)
 
             builder.setPositiveButton("Update") { _, _ ->
-                viewModel.update(routines.id, category.text.toString(), routines.routinetime, 0)
+                viewModel.update(routines.id, category.text.toString(), inputTime.text.toString(), 0)
+
             }
             builder.setNegativeButton("Delete") { dialog, _ ->
                 viewModel.delete(routines.id)
@@ -93,5 +107,22 @@ class RoutineAdapter(var mContext:Context,
                 }.show()
             }
         }
+    }
+    private fun showTimePickerDialog(inputTime: EditText) {
+        val cal = Calendar.getInstance()
+        val hour = cal.get(Calendar.HOUR_OF_DAY)
+        val minute = cal.get(Calendar.MINUTE)
+
+        val timePickerDialog = TimePickerDialog(
+            this.mContext,
+            { _, selectedHour, selectedMinute ->
+                val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute)
+                inputTime.setText(formattedTime)
+            },
+            hour,
+            minute,
+            true
+        )
+        timePickerDialog.show()
     }
 }

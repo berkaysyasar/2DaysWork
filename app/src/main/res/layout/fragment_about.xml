@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.SettingsFragment"
-    android:background="#5967B8"
+    tools:context=".ui.fragment.menuItems.SettingsFragment"
+    android:background="@color/drawerbackground"
     android:layout_margin="3dp"
     android:padding="2dp">
 

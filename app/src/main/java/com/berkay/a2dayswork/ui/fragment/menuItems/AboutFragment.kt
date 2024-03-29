@@ -1,4 +1,4 @@
-package com.berkay.a2dayswork.ui.fragment
+package com.berkay.a2dayswork.ui.fragment.menuItems
 
 import android.os.Bundle
 import android.text.Html
