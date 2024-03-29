@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.berkay.a2dayswork.R
 import com.berkay.a2dayswork.data.entity.RMaker
-import com.berkay.a2dayswork.databinding.RoutineDesignBinding
+import com.berkay.a2dayswork.databinding.DesignRoutineBinding
 import com.berkay.a2dayswork.ui.viewmodel.RoutineViewModel
 import com.google.android.material.snackbar.Snackbar
 import java.util.Calendar
@@ -28,11 +28,11 @@ class RoutineAdapter(var mContext:Context,
                      var viewModel: RoutineViewModel) :
         RecyclerView.Adapter<RoutineAdapter.ViewHolder>() {
 
-    inner class ViewHolder(var binding: RoutineDesignBinding) :
+    inner class ViewHolder(var binding: DesignRoutineBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = RoutineDesignBinding.inflate(LayoutInflater.from(mContext), parent, false)
+        val binding = DesignRoutineBinding.inflate(LayoutInflater.from(mContext), parent, false)
         return ViewHolder(binding)
     }
 
@@ -59,11 +59,19 @@ class RoutineAdapter(var mContext:Context,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
             category.layoutParams = inputRoutineLayoutParams
+            inputRoutineLayoutParams.setMargins(dpToPx(20, this.mContext), 0, dpToPx(20, this.mContext), 0)
             layout.addView(category)
 
             val inputTime = EditText(this.mContext)
             inputTime.setText(routines.routinetime)
             inputTime.isFocusable = false
+
+            val inputTimeLayoutParams = LinearLayout.LayoutParams(
+                dpToPx(55, this.mContext), // Genişliği 50dp olarak ayarla
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            inputTimeLayoutParams.setMargins(dpToPx(20, this.mContext), 0, dpToPx(20, this.mContext), 0)
+            inputTime.layoutParams = inputTimeLayoutParams
 
 
             inputTime.setOnClickListener {
@@ -107,6 +115,10 @@ class RoutineAdapter(var mContext:Context,
                 }.show()
             }
         }
+    }
+    fun dpToPx(dp: Int, context: Context): Int {
+        val density = context.resources.displayMetrics.density
+        return (dp * density).toInt()
     }
     private fun showTimePickerDialog(inputTime: EditText) {
         val cal = Calendar.getInstance()

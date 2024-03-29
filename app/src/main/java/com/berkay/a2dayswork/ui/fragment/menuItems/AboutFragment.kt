@@ -28,9 +28,7 @@ class AboutFragment : Fragment() {
 
         // Metni iki yana yaslamak için Layout.Alignment kullanma
         binding.welcomeTextView.text = text
-        binding.welcomeTextView.textAlignment = View.TEXT_ALIGNMENT_TEXT_START
-
-
+        binding.welcomeTextView.textAlignment = View.TEXT_ALIGNMENT_CENTER
         return binding.root
     }
 

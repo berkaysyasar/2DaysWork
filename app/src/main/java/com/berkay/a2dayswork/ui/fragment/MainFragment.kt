@@ -61,6 +61,7 @@ class MainFragment : Fragment() {
             )
 
             category.layoutParams = inputRoutineLayoutParams
+            inputRoutineLayoutParams.setMargins(dpToPx(20, requireContext()), 0, dpToPx(20, requireContext()), 0)
             layout.addView(category)
 
             builder.setView(layout)
@@ -87,6 +88,10 @@ class MainFragment : Fragment() {
 
 
         return binding.root
+    }
+    fun dpToPx(dp: Int, context: Context): Int {
+        val density = context.resources.displayMetrics.density
+        return (dp * density).toInt()
     }
     private fun capitalizeFirstLetter(input: String): String {
         return input.substring(0, 1).toUpperCase() + input.substring(1)

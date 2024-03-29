@@ -49,66 +49,11 @@ class RoutineFragment : Fragment() {
         binding.routineRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         binding.addRoutineButton.setOnClickListener{
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Add Routine")
-
-            val layout = LinearLayout(requireContext())
-            layout.orientation = LinearLayout.VERTICAL
-
-            val inputRoutine = EditText(requireContext())
-            inputRoutine.hint = "Routine Name"
-            val inputRoutineLayoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-
-            inputRoutine.layoutParams = inputRoutineLayoutParams
-            layout.addView(inputRoutine)
-
-            val inputTime = EditText(requireContext())
-            inputTime.hint = "Time"
-            inputTime.isFocusable = false
-
-            val inputTimeLayoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-
-            inputTime.setOnClickListener {
-                showTimePickerDialog(inputTime)
-            }
-            layout.addView(inputTime)
-            builder.setView(layout)
-
-            builder.setPositiveButton("Add") { _, _ ->
-                val inputText = inputRoutine.text.toString()
-                if (inputText.isNotEmpty()) {
-                    val name = capitalizeFirstLetter(inputText)
-                    val time = inputTime.text.toString()
-                    if (name.length in 2..20) {
-                        viewModel.save(name, time)
-                    } else {
-                        Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    Toast.makeText(requireContext(), "Routine name and time cannot be empty", Toast.LENGTH_SHORT).show()
-                }
-            }
-            builder.setNegativeButton("Cancel") { dialog, _ ->
-                dialog.cancel()
-            }
-            builder.show()
+            addRoutine()
         }
-        val args = arguments
-        val noteSwitchValue = args?.getInt("routineswitch")
-        if (noteSwitchValue == null) {
-            val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-            val isNoteSwitchChecked = sharedPreferences.getBoolean("routineswitch", true)
-            binding.addRoutineButton.visibility = if (isNoteSwitchChecked) View.VISIBLE else View.INVISIBLE
-        } else {
-            // Eğer Bundle'dan değer alınabilirse, bu değere göre işlem yap
-            binding.addRoutineButton.visibility = if (noteSwitchValue == 1) View.VISIBLE else View.INVISIBLE
-        }
+
+        getargsfromSettings()
+
         return binding.root
     }
 
@@ -119,6 +64,79 @@ class RoutineFragment : Fragment() {
             val routineAdapter = RoutineAdapter(requireContext(), routines, viewModel)
             binding.routineRecyclerView.adapter = routineAdapter
         }
+    }
+
+    private fun getargsfromSettings(){
+        val args = arguments
+        val noteSwitchValue = args?.getInt("routineswitch")
+        if (noteSwitchValue == null) {
+            val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+            val isNoteSwitchChecked = sharedPreferences.getBoolean("routineswitch", true)
+            binding.addRoutineButton.visibility = if (isNoteSwitchChecked) View.VISIBLE else View.INVISIBLE
+        } else {
+            // Eğer Bundle'dan değer alınabilirse, bu değere göre işlem yap
+            binding.addRoutineButton.visibility = if (noteSwitchValue == 1) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    private fun addRoutine(){
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Add Routine")
+
+        val layout = LinearLayout(requireContext())
+        layout.orientation = LinearLayout.VERTICAL
+
+        val inputRoutine = EditText(requireContext())
+        inputRoutine.hint = "Routine Name"
+        val inputRoutineLayoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        inputRoutine.layoutParams = inputRoutineLayoutParams
+        inputRoutineLayoutParams.setMargins(dpToPx(20, requireContext()), 0, dpToPx(20, requireContext()), 0)
+        layout.addView(inputRoutine)
+
+        val inputTime = EditText(requireContext())
+        inputTime.hint = "Time"
+        inputTime.isFocusable = false
+
+        val inputTimeLayoutParams = LinearLayout.LayoutParams(
+            dpToPx(55, requireContext()), // Genişliği 50dp olarak ayarla
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        inputTimeLayoutParams.setMargins(dpToPx(20, requireContext()), 0, dpToPx(20, requireContext()), 0)
+        inputTime.layoutParams = inputTimeLayoutParams
+
+        inputTime.setOnClickListener {
+            showTimePickerDialog(inputTime)
+        }
+        layout.addView(inputTime)
+        builder.setView(layout)
+
+        builder.setPositiveButton("Add") { _, _ ->
+            val inputText = inputRoutine.text.toString()
+            if (inputText.isNotEmpty()) {
+                val name = capitalizeFirstLetter(inputText)
+                val time = inputTime.text.toString()
+                if (name.length in 2..20) {
+                    viewModel.save(name, time)
+                } else {
+                    Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(requireContext(), "Routine name and time cannot be empty", Toast.LENGTH_SHORT).show()
+            }
+        }
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.cancel()
+        }
+        builder.show()
+    }
+
+    fun dpToPx(dp: Int, context: Context): Int {
+        val density = context.resources.displayMetrics.density
+        return (dp * density).toInt()
     }
 
     private fun showTimePickerDialog(inputTime: EditText) {

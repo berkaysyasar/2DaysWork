@@ -12,17 +12,18 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.berkay.a2dayswork.R
 import com.berkay.a2dayswork.data.entity.CMaker
-import com.berkay.a2dayswork.databinding.CardDesignBinding
+
+import com.berkay.a2dayswork.databinding.DesignNoteBinding
 import com.berkay.a2dayswork.ui.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class CategoriesAdapter(var mContext: Context, var categoryList:MutableList<CMaker>, var viewModel: MainViewModel)
     :RecyclerView.Adapter<CategoriesAdapter.ViewHolder>(){
 
-        inner class ViewHolder(var binding:CardDesignBinding): RecyclerView.ViewHolder(binding.root)
+        inner class ViewHolder(var binding:DesignNoteBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = CardDesignBinding.inflate(LayoutInflater.from(mContext),parent,false)
+        val binding = DesignNoteBinding.inflate(LayoutInflater.from(mContext),parent,false)
         return ViewHolder(binding)
     }
 
@@ -47,6 +48,7 @@ class CategoriesAdapter(var mContext: Context, var categoryList:MutableList<CMak
             )
 
             category.layoutParams = inputRoutineLayoutParams
+            inputRoutineLayoutParams.setMargins(dpToPx(20, this.mContext), 0, dpToPx(20, this.mContext), 0)
             layout.addView(category)
 
             builder.setView(layout)
@@ -66,5 +68,10 @@ class CategoriesAdapter(var mContext: Context, var categoryList:MutableList<CMak
 
     override fun getItemCount(): Int {
         return categoryList.size
+    }
+
+    fun dpToPx(dp: Int, context: Context): Int {
+        val density = context.resources.displayMetrics.density
+        return (dp * density).toInt()
     }
 }

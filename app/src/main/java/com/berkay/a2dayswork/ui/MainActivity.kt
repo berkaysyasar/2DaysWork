@@ -26,6 +26,7 @@ import com.berkay.a2dayswork.R
 import com.berkay.a2dayswork.databinding.ActivityMainBinding
 import com.berkay.a2dayswork.ui.fragment.menuItems.AboutFragment
 import com.berkay.a2dayswork.ui.fragment.MainFragment
+import com.berkay.a2dayswork.ui.fragment.ReminderFragment
 import com.berkay.a2dayswork.ui.fragment.RoutineFragment
 import com.berkay.a2dayswork.ui.fragment.menuItems.DevFragment
 import com.berkay.a2dayswork.ui.fragment.menuItems.SettingsFragment
@@ -123,6 +124,7 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId){
                 R.id.routineItem -> replaceFragment(RoutineFragment())
                 R.id.homeItem -> replaceFragment(MainFragment())
+                R.id.reminderItem -> replaceFragment(ReminderFragment())
                 else -> {
 
                 }
