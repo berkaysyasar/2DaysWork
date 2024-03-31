@@ -1,5 +1,6 @@
 package com.berkay.a2dayswork.ui.fragment
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -28,7 +29,8 @@ class ReminderFragment : Fragment() {
     }
 
     private fun showRemindDialog() {
-        TODO("Not yet implemented")
+        val builder = AlertDialog.Builder(requireContext())
+
     }
 
 }
