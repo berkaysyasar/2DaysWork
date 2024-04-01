@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -60,7 +61,6 @@ class RoutineAdapter(var mContext:Context,
             )
             category.layoutParams = inputRoutineLayoutParams
             inputRoutineLayoutParams.setMargins(dpToPx(20, this.mContext), 0, dpToPx(20, this.mContext), 0)
-            layout.addView(category)
 
             val inputTime = EditText(this.mContext)
             inputTime.setText(routines.routinetime)
@@ -73,15 +73,26 @@ class RoutineAdapter(var mContext:Context,
             inputTimeLayoutParams.setMargins(dpToPx(20, this.mContext), 0, dpToPx(20, this.mContext), 0)
             inputTime.layoutParams = inputTimeLayoutParams
 
+            val remindCheckBox = CheckBox(this.mContext)
+            remindCheckBox.setText("Warn 15 minutes before")
+            if(routines.isNotificationEnabled == 1){
+                remindCheckBox.isChecked = true
+            }else{
+                remindCheckBox.isChecked = false
+            }
+
 
             inputTime.setOnClickListener {
                 showTimePickerDialog(inputTime)
             }
-            layout.addView(inputTime)
             builder.setView(layout)
 
+            layout.addView(category)
+            layout.addView(inputTime)
+            layout.addView(remindCheckBox)
+
             builder.setPositiveButton("Update") { _, _ ->
-                viewModel.update(routines.id, category.text.toString(), inputTime.text.toString(), 0,0)
+                viewModel.update(routines.id, category.text.toString(), inputTime.text.toString(), 0, isnotificationenabled = if(remindCheckBox.isChecked) 1 else 0)
 
             }
             builder.setNegativeButton("Delete") { dialog, _ ->

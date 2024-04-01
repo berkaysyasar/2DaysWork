@@ -26,9 +26,9 @@ class RoutineViewModel @Inject constructor(var routineRepo: routineRepo) : ViewM
         }
     }
 
-    fun save(name:String, time:String){
+    fun save(name:String, time:String, isnotificationenabled: Int){
         CoroutineScope(Dispatchers.Main).launch {
-            routineRepo.save(name, time)
+            routineRepo.save(name, time, isnotificationenabled)
             loadRoutines()
         }
     }

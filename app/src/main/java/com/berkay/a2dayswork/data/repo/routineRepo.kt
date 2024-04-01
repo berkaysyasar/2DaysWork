@@ -5,7 +5,7 @@ import com.berkay.a2dayswork.data.entity.RMaker
 
 class routineRepo(var routinesDataSource: routineDataSource) {
 
-    suspend fun save(name:String, time:String) = routinesDataSource.save(name, time)
+    suspend fun save(name:String, time:String, isnotificationenabled: Int) = routinesDataSource.save(name, time, isnotificationenabled)
 
     suspend fun update(id:Int, name:String, time:String, isdone:Int, isnotificationenabled:Int) = routinesDataSource.update(id, name, time,isdone,isnotificationenabled)
 

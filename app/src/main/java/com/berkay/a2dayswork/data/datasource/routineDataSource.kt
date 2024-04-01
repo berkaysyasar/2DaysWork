@@ -6,8 +6,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class routineDataSource(var routineDao: RoutineDao) {
-    suspend fun save(routineName:String, routineTime:String) {
-        val newRoutine = RMaker(0, routineName, routineTime,0,0)
+    suspend fun save(routineName:String, routineTime:String, isnotificationenabled: Int) {
+        val newRoutine = RMaker(0, routineName, routineTime,0,isnotificationenabled)
         routineDao.save(newRoutine)
     }
 
@@ -24,7 +24,6 @@ class routineDataSource(var routineDao: RoutineDao) {
         val updateRoutine = RMaker(id, routinename, routinetime,1, isnotificationenabled)
         routineDao.markasdone(updateRoutine)
     }
-
 
     suspend fun loadRoutines(): MutableList<RMaker> = withContext(Dispatchers.IO){
         return@withContext routineDao.loadRoutine()

@@ -1,6 +1,9 @@
 package com.berkay.a2dayswork.ui
 
 import RoutineWorker
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Build
@@ -15,6 +18,7 @@ import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -131,6 +135,8 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
+        createNotificationChannel()
     }
 
     override fun onResume() {
@@ -138,6 +144,23 @@ class MainActivity : AppCompatActivity() {
         checkDailyRoutine()
         println("onResume")
     }
+
+
+
+        private fun createNotificationChannel() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val name = "Routine Reminder Channel"
+                val descriptionText = "Channel for routine reminder"
+                val importance = NotificationManager.IMPORTANCE_HIGH
+                val channel = NotificationChannel("routineChannel", name, importance).apply {
+                    description = descriptionText
+                }
+                val notificationManager: NotificationManager =
+                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.createNotificationChannel(channel)
+            }
+        }
+
 
     private fun checkDailyRoutine() {
         val workRequest = OneTimeWorkRequestBuilder<RoutineWorker>().build()

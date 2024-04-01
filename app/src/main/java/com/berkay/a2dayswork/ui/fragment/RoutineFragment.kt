@@ -1,23 +1,29 @@
 package com.berkay.a2dayswork.ui.fragment
 
 import RoutineWorker
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.berkay.a2dayswork.R
+import com.berkay.a2dayswork.data.workmanager.NotificationReceiver
 import com.berkay.a2dayswork.ui.adapter.RoutineAdapter
 import com.berkay.a2dayswork.databinding.FragmentRoutineBinding
 import com.berkay.a2dayswork.ui.viewmodel.RoutineViewModel
@@ -95,7 +101,7 @@ class RoutineFragment : Fragment() {
 
         inputRoutine.layoutParams = inputRoutineLayoutParams
         inputRoutineLayoutParams.setMargins(dpToPx(20, requireContext()), 0, dpToPx(20, requireContext()), 0)
-        layout.addView(inputRoutine)
+
 
         val inputTime = EditText(requireContext())
         inputTime.hint = "Time"
@@ -108,24 +114,60 @@ class RoutineFragment : Fragment() {
         inputTimeLayoutParams.setMargins(dpToPx(20, requireContext()), 0, dpToPx(20, requireContext()), 0)
         inputTime.layoutParams = inputTimeLayoutParams
 
+        val remindCheckBox = CheckBox(requireContext())
+        remindCheckBox.text = "Warn 15 minutes before"
+
+        val remindCheckBoxLayoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        remindCheckBoxLayoutParams.setMargins(dpToPx(20, requireContext()), 0, dpToPx(20, requireContext()), 0)
+        remindCheckBox.layoutParams = remindCheckBoxLayoutParams
+
         inputTime.setOnClickListener {
             showTimePickerDialog(inputTime)
         }
-        layout.addView(inputTime)
         builder.setView(layout)
+
+        layout.addView(inputRoutine)
+        layout.addView(inputTime)
+        layout.addView(remindCheckBox)
 
         builder.setPositiveButton("Add") { _, _ ->
             val inputText = inputRoutine.text.toString()
+            val remindChecked = remindCheckBox.isChecked
+
             if (inputText.isNotEmpty()) {
                 val name = capitalizeFirstLetter(inputText)
                 val time = inputTime.text.toString()
                 if (name.length in 2..20) {
-                    viewModel.save(name, time)
+                    viewModel.save(name, time, if (remindChecked) 1 else 0)
+                    if(remindChecked){
+                        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                        val intent = Intent(context, NotificationReceiver::class.java)
+                        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+                        val timeParts = time.split(":")
+                        val routineHour = timeParts[0].toInt()
+                        val routineMinute = timeParts[1].toInt()
+
+                        // Set the alarm to start at the routine time
+                        val calendar: Calendar = Calendar.getInstance().apply {
+                            timeInMillis = System.currentTimeMillis()
+                            set(Calendar.HOUR_OF_DAY, routineHour)
+                            set(Calendar.MINUTE, routineMinute)
+                        }
+
+                        // setExactAndAllowWhileIdle to ensure precise delivery of the alarm
+                        // even when the device is in low-power idle modes
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+
+                    }
                 } else {
-                    Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_LONG).show()
                 }
             } else {
-                Toast.makeText(requireContext(), "Routine name and time cannot be empty", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Routine name and time cannot be empty", Toast.LENGTH_LONG).show()
             }
         }
         builder.setNegativeButton("Cancel") { dialog, _ ->
