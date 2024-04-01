@@ -81,7 +81,7 @@ class RoutineAdapter(var mContext:Context,
             builder.setView(layout)
 
             builder.setPositiveButton("Update") { _, _ ->
-                viewModel.update(routines.id, category.text.toString(), inputTime.text.toString(), 0)
+                viewModel.update(routines.id, category.text.toString(), inputTime.text.toString(), 0,0)
 
             }
             builder.setNegativeButton("Delete") { dialog, _ ->
@@ -105,12 +105,12 @@ class RoutineAdapter(var mContext:Context,
             if (routines.isDone == 0){
                 routines.isDone = 1
                 viewModel.markasdone(routines.id)
-                viewModel.update(routines.id, routines.routinename, routines.routinetime, routines.isDone)
+                viewModel.update(routines.id, routines.routinename, routines.routinetime, routines.isDone,routines.isNotificationEnabled)
                 notifyItemChanged(position)
             } else {
                 Snackbar.make(design.root,"Routine is already done. Are you sure you want to mark it as undone?", Snackbar.LENGTH_LONG).setAction("Undo"){
                     routines.isDone = 0
-                    viewModel.update(routines.id, routines.routinename, routines.routinetime, routines.isDone)
+                    viewModel.update(routines.id, routines.routinename, routines.routinetime, routines.isDone,routines.isNotificationEnabled)
                     notifyItemChanged(position)
                 }.show()
             }

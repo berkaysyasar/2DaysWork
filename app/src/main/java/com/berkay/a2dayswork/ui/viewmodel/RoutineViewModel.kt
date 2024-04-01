@@ -33,16 +33,16 @@ class RoutineViewModel @Inject constructor(var routineRepo: routineRepo) : ViewM
         }
     }
 
-    fun update(id:Int, name:String, time:String, isdone:Int){
+    fun update(id:Int, name:String, time:String, isdone:Int, isnotificationenabled:Int){
         CoroutineScope(Dispatchers.Main).launch {
-            routineRepo.update(id, name, time, isdone)
+            routineRepo.update(id, name, time, isdone, isnotificationenabled)
             loadRoutines()
         }
     }
 
     fun markasdone(id:Int){
         CoroutineScope(Dispatchers.Main).launch {
-            routineRepo.update(id, "", "",0)
+            routineRepo.update(id, "", "",0,0)
             loadRoutines()
         }
     }

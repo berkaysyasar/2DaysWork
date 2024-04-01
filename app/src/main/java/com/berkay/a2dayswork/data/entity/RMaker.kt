@@ -11,5 +11,7 @@ data class RMaker(  @PrimaryKey(autoGenerate = true)
                     @ColumnInfo(name = "id") @NotNull var id:Int,
                     @ColumnInfo(name = "routinename") @NotNull var routinename:String,
                     @ColumnInfo(name="routinetime") @NotNull var routinetime:String,
-                    @ColumnInfo(name="isDone") @NotNull var isDone:Int) : Serializable {
+                    @ColumnInfo(name="isDone") @NotNull var isDone:Int,
+                    @ColumnInfo(name = "isNotificationEnabled") @NotNull var isNotificationEnabled: Int)
+    : Serializable {
 }

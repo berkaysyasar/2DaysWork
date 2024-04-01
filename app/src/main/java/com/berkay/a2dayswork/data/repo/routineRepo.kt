@@ -7,9 +7,9 @@ class routineRepo(var routinesDataSource: routineDataSource) {
 
     suspend fun save(name:String, time:String) = routinesDataSource.save(name, time)
 
-    suspend fun update(id:Int, name:String, time:String, isdone:Int) = routinesDataSource.update(id, name, time,isdone)
+    suspend fun update(id:Int, name:String, time:String, isdone:Int, isnotificationenabled:Int) = routinesDataSource.update(id, name, time,isdone,isnotificationenabled)
 
-    suspend fun markasdone(id:Int, routinename:String, routinetime:String) = routinesDataSource.markasdone(id, routinename, routinetime)
+    suspend fun markasdone(id:Int, routinename:String, routinetime:String,isnotificationenabled: Int) = routinesDataSource.markasdone(id, routinename, routinetime,isnotificationenabled)
 
     suspend fun delete(id:Int) = routinesDataSource.delete(id)
 

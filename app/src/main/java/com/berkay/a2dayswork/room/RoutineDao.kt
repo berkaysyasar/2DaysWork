@@ -22,6 +22,9 @@ interface RoutineDao {
     @Update
     suspend fun markasdone(routine : RMaker)
 
+    @Update
+    suspend fun isnotificationenabled(routine : RMaker)
+
     @Delete
     suspend fun delete(routine : RMaker)
 }
