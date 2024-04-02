@@ -12,10 +12,11 @@ import com.berkay.a2dayswork.R
 
 class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
+        val routineName = intent.getStringExtra("routineName")
         val builder = NotificationCompat.Builder(context, "routineChannel")
             .setSmallIcon(R.drawable.baseline_circle_notifications_24)
             .setContentTitle("Routine Reminder")
-            .setContentText("It's time for your routine!")
+            .setContentText("$routineName")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.VIBRATE) == PackageManager.PERMISSION_GRANTED) {

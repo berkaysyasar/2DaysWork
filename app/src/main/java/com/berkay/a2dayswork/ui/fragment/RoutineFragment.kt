@@ -16,13 +16,8 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.PeriodicWorkRequest
-import androidx.work.WorkManager
-import com.berkay.a2dayswork.R
 import com.berkay.a2dayswork.data.workmanager.NotificationReceiver
 import com.berkay.a2dayswork.ui.adapter.RoutineAdapter
 import com.berkay.a2dayswork.databinding.FragmentRoutineBinding
@@ -30,7 +25,6 @@ import com.berkay.a2dayswork.ui.viewmodel.RoutineViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
@@ -145,23 +139,26 @@ class RoutineFragment : Fragment() {
                     if(remindChecked){
                         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
                         val intent = Intent(context, NotificationReceiver::class.java)
+                        intent.putExtra("routineName", inputText)
                         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
                         val timeParts = time.split(":")
                         val routineHour = timeParts[0].toInt()
                         val routineMinute = timeParts[1].toInt()
 
+                        val routineMinuteAdjusted = if(routineMinute < 15) routineMinute + 45 else routineMinute - 15
+                        val routineHourAdjusted = if(routineMinute < 15) routineHour - 1 else routineHour
+
                         // Set the alarm to start at the routine time
                         val calendar: Calendar = Calendar.getInstance().apply {
                             timeInMillis = System.currentTimeMillis()
-                            set(Calendar.HOUR_OF_DAY, routineHour)
-                            set(Calendar.MINUTE, routineMinute)
+                            set(Calendar.HOUR_OF_DAY, routineHourAdjusted)
+                            set(Calendar.MINUTE, routineMinuteAdjusted)
                         }
 
                         // setExactAndAllowWhileIdle to ensure precise delivery of the alarm
                         // even when the device is in low-power idle modes
                         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
-
                     }
                 } else {
                     Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_LONG).show()

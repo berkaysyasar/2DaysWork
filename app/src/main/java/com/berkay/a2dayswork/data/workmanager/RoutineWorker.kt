@@ -1,8 +1,14 @@
+import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.room.Room
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.berkay.a2dayswork.R
 import com.berkay.a2dayswork.room.MyDataBase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -42,7 +48,6 @@ class RoutineWorker(context: Context, params: WorkerParameters) : CoroutineWorke
                     }
                 }
             }
-
             // İşlem başarıyla tamamlandıysa Result.success() döndür
             Result.success()
         } catch (e: Exception) {
