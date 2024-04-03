@@ -3,6 +3,7 @@ package com.berkay.a2dayswork.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.berkay.a2dayswork.data.entity.RMaker
 import com.berkay.a2dayswork.data.repo.routineRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,6 +47,12 @@ class RoutineViewModel @Inject constructor(var routineRepo: routineRepo) : ViewM
             loadRoutines()
         }
     }
+
+    suspend fun getLastRoutineId(): Int {
+    val lastRoutine = routineRepo.getLastRoutine()
+    return lastRoutine?.id ?: -1
+}
+
 
     fun loadRoutines(){
         CoroutineScope(Dispatchers.Main).launch {

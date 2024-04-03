@@ -11,6 +11,7 @@ class routineRepo(var routinesDataSource: routineDataSource) {
 
     suspend fun markasdone(id:Int, routinename:String, routinetime:String,isnotificationenabled: Int) = routinesDataSource.markasdone(id, routinename, routinetime,isnotificationenabled)
 
+    suspend fun getLastRoutine() : RMaker = routinesDataSource.getLastRoutine()
     suspend fun delete(id:Int) = routinesDataSource.delete(id)
 
     suspend fun loadRoutine() : MutableList<RMaker> = routinesDataSource.loadRoutines()

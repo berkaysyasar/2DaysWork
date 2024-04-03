@@ -23,6 +23,8 @@ import com.berkay.a2dayswork.ui.viewmodel.MainViewModel
 import com.berkay.a2dayswork.ui.viewmodel.RoutineViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import com.berkay.a2dayswork.utils.Utils.capitalizeFirstLetter
+import com.berkay.a2dayswork.utils.Utils.dpToPx
 
 
 @AndroidEntryPoint
@@ -35,8 +37,6 @@ class MainFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentMainBinding.inflate(inflater, container, false)
-
-        // Oluşturun
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         viewModel.categorList.observe(viewLifecycleOwner){
@@ -47,33 +47,7 @@ class MainFragment : Fragment() {
         binding.categoriesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         binding.addButton.setOnClickListener{
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Add Category")
-
-            val layout = LinearLayout(requireContext())
-            layout.orientation = LinearLayout.VERTICAL
-
-            val category = EditText(requireContext())
-            category.hint = "Category Name"
-            val inputRoutineLayoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-
-            category.layoutParams = inputRoutineLayoutParams
-            inputRoutineLayoutParams.setMargins(dpToPx(20, requireContext()), 0, dpToPx(20, requireContext()), 0)
-            layout.addView(category)
-
-            builder.setView(layout)
-
-            builder.setPositiveButton("Add") { _, _ ->
-                val name = capitalizeFirstLetter(category.text.toString())
-                viewModel.save(name)
-            }
-            builder.setNegativeButton("Cancel") { dialog, _ ->
-                dialog.cancel()
-            }
-            builder.show()
+            categoryAdd()
         }
         val args = arguments
         val noteSwitchValue = args?.getInt("noteswitch")
@@ -85,16 +59,36 @@ class MainFragment : Fragment() {
             // Eğer Bundle'dan değer alınabilirse, bu değere göre işlem yap
             binding.addButton.visibility = if (noteSwitchValue == 1) View.VISIBLE else View.INVISIBLE
         }
-
-
         return binding.root
     }
-    fun dpToPx(dp: Int, context: Context): Int {
-        val density = context.resources.displayMetrics.density
-        return (dp * density).toInt()
-    }
-    private fun capitalizeFirstLetter(input: String): String {
-        return input.substring(0, 1).toUpperCase() + input.substring(1)
+    private fun categoryAdd(){
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Add Category")
+
+        val layout = LinearLayout(requireContext())
+        layout.orientation = LinearLayout.VERTICAL
+
+        val category = EditText(requireContext())
+        category.hint = "Category Name"
+        val inputRoutineLayoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        category.layoutParams = inputRoutineLayoutParams
+        inputRoutineLayoutParams.setMargins(dpToPx(20, requireContext()), 0, dpToPx(20, requireContext()), 0)
+        layout.addView(category)
+
+        builder.setView(layout)
+
+        builder.setPositiveButton("Add") { _, _ ->
+            val name = capitalizeFirstLetter(category.text.toString())
+            viewModel.save(name)
+        }
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.cancel()
+        }
+        builder.show()
     }
 }
 

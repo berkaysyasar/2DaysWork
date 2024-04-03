@@ -22,16 +22,11 @@ class SettingsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
-
-
         sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
         // Not switch'in son durumunu al
         val isNoteSwitchChecked = sharedPreferences.getBoolean("noteswitch", true)
         val isRoutineSwitchChecked = sharedPreferences.getBoolean("routineswitch", true)
-        val isEnabled = sharedPreferences.getBoolean("enabled", false)
-
-
 
         binding.noteswitch.setOnCheckedChangeListener { _, isChecked ->
             sharedPreferences.edit().putBoolean("noteswitch", isChecked).apply()
@@ -69,7 +64,6 @@ class SettingsFragment : Fragment() {
                 View.VISIBLE // Aksi takdirde görünür hale getir
             }
         }
-
         val bundle = Bundle()
         if(isNoteSwitchChecked.equals(true)) {
             binding.noteswitch.isChecked = true
@@ -89,11 +83,9 @@ class SettingsFragment : Fragment() {
         val routineFragment = RoutineFragment()
         routineFragment.arguments = bundle
 
-
         // MainFragment'e geçiş yapmadan önce Bundle'ı ekleyin
         val mainFragment = MainFragment()
         mainFragment.arguments = bundle
-
 
         return binding.root
     }

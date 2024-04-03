@@ -9,7 +9,6 @@ import com.berkay.a2dayswork.R
 
 
 class DevFragment : Fragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

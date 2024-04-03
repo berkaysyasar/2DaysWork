@@ -27,7 +27,6 @@ class ReminderFragment : Fragment() {
 
         return binding.root
     }
-
     private fun showRemindDialog() {
         val builder = AlertDialog.Builder(requireContext()) 
 

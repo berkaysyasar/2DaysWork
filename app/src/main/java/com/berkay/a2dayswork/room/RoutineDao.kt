@@ -24,4 +24,7 @@ interface RoutineDao {
 
     @Delete
     suspend fun delete(routine : RMaker)
+
+    @Query("SELECT * FROM routine ORDER BY id DESC LIMIT 1")
+    suspend fun getLastRoutine() : RMaker
 }

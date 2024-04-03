@@ -25,6 +25,10 @@ class routineDataSource(var routineDao: RoutineDao) {
         routineDao.markasdone(updateRoutine)
     }
 
+    suspend fun getLastRoutine() : RMaker {
+        return routineDao.getLastRoutine()
+    }
+
     suspend fun loadRoutines(): MutableList<RMaker> = withContext(Dispatchers.IO){
         return@withContext routineDao.loadRoutine()
     }

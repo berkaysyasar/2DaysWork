@@ -17,6 +17,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.berkay.a2dayswork.data.workmanager.NotificationReceiver
 import com.berkay.a2dayswork.ui.adapter.RoutineAdapter
@@ -25,6 +26,10 @@ import com.berkay.a2dayswork.ui.viewmodel.RoutineViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 import java.util.Locale
+import com.berkay.a2dayswork.utils.Utils.dpToPx
+import com.berkay.a2dayswork.utils.Utils.capitalizeFirstLetter
+import com.berkay.a2dayswork.utils.Utils.showTimePickerDialog
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -119,7 +124,7 @@ class RoutineFragment : Fragment() {
         remindCheckBox.layoutParams = remindCheckBoxLayoutParams
 
         inputTime.setOnClickListener {
-            showTimePickerDialog(inputTime)
+            showTimePickerDialog(requireContext(),inputTime)
         }
         builder.setView(layout)
 
@@ -139,26 +144,30 @@ class RoutineFragment : Fragment() {
                     if(remindChecked){
                         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
                         val intent = Intent(context, NotificationReceiver::class.java)
-                        intent.putExtra("routineName", inputText)
-                        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+                        intent.putExtra("routineName", name)
+                        lifecycleScope.launch {
+                            val routineId = viewModel.getLastRoutineId()
+                            val requestCode = if (routineId == -1) 0 else routineId
+                            val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_IMMUTABLE)
 
-                        val timeParts = time.split(":")
-                        val routineHour = timeParts[0].toInt()
-                        val routineMinute = timeParts[1].toInt()
+                            val timeParts = time.split(":")
+                            val routineHour = timeParts[0].toInt()
+                            val routineMinute = timeParts[1].toInt()
 
-                        val routineMinuteAdjusted = if(routineMinute < 15) routineMinute + 45 else routineMinute - 15
-                        val routineHourAdjusted = if(routineMinute < 15) routineHour - 1 else routineHour
+                            val routineMinuteAdjusted = if(routineMinute < 15) routineMinute + 45 else routineMinute - 15
+                            val routineHourAdjusted = if(routineMinute < 15) routineHour - 1 else routineHour
 
-                        // Set the alarm to start at the routine time
-                        val calendar: Calendar = Calendar.getInstance().apply {
-                            timeInMillis = System.currentTimeMillis()
-                            set(Calendar.HOUR_OF_DAY, routineHourAdjusted)
-                            set(Calendar.MINUTE, routineMinuteAdjusted)
+                            // Set the alarm to start at the routine time
+                            val calendar: Calendar = Calendar.getInstance().apply {
+                                timeInMillis = System.currentTimeMillis()
+                                set(Calendar.HOUR_OF_DAY, routineHourAdjusted)
+                                set(Calendar.MINUTE, routineMinuteAdjusted)
+                            }
+
+                            // setExactAndAllowWhileIdle to ensure precise delivery of the alarm
+                            // even when the device is in low-power idle modes
+                            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
                         }
-
-                        // setExactAndAllowWhileIdle to ensure precise delivery of the alarm
-                        // even when the device is in low-power idle modes
-                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
                     }
                 } else {
                     Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_LONG).show()
@@ -173,30 +182,5 @@ class RoutineFragment : Fragment() {
         builder.show()
     }
 
-    fun dpToPx(dp: Int, context: Context): Int {
-        val density = context.resources.displayMetrics.density
-        return (dp * density).toInt()
-    }
 
-    private fun showTimePickerDialog(inputTime: EditText) {
-        val cal = Calendar.getInstance()
-        val hour = cal.get(Calendar.HOUR_OF_DAY)
-        val minute = cal.get(Calendar.MINUTE)
-
-        val timePickerDialog = TimePickerDialog(
-            requireContext(),
-            { _, selectedHour, selectedMinute ->
-                val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute)
-                inputTime.setText(formattedTime)
-            },
-            hour,
-            minute,
-            true
-        )
-        timePickerDialog.show()
-    }
-
-    private fun capitalizeFirstLetter(input: String): String {
-        return input.substring(0, 1).toUpperCase() + input.substring(1)
-    }
 }
