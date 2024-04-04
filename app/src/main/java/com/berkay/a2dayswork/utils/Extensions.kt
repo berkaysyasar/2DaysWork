@@ -1,5 +1,6 @@
 package com.berkay.a2dayswork.utils
 
+import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.view.View
@@ -39,7 +40,30 @@ object Utils {
         )
         timePickerDialog.show()
     }
-    fun capitalizeFirstLetter(input: String): String {
-        return input.substring(0, 1).toUpperCase() + input.substring(1)
+
+    fun datePickerDialog(context: Context, inputDate: EditText) {
+        val cal = Calendar.getInstance()
+        val year = cal.get(Calendar.YEAR)
+        val month = cal.get(Calendar.MONTH)
+        val day = cal.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            context,
+            { _, selectedYear, selectedMonth, selectedDay ->
+                val formattedDate = String.format(Locale.getDefault(), "%02d/%02d/%02d", selectedDay, selectedMonth, selectedYear)
+                inputDate.setText(formattedDate)
+            },
+            year,
+            month,
+            day
+        )
+        datePickerDialog.show()
     }
+    fun capitalizeFirstLetter(str: String): String {
+    return if (str.isEmpty()) {
+        str
+    } else {
+        str.substring(0, 1).uppercase(Locale.getDefault()) + str.substring(1)
+    }
+}
 }

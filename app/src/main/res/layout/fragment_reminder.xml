@@ -8,13 +8,18 @@
     tools:context=".ui.fragment.ReminderFragment"
     android:background="@color/mainbackground">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reminderRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <Button
         android:id="@+id/reminderButton"
         android:layout_width="311dp"
         android:layout_height="70dp"
         android:layout_marginBottom="16dp"
         android:text="Set a Reminder"
-        android:backgroundTint="@color/maincolor"
+        android:backgroundTint="@color/addbuttoncolor"
         android:textColor="@color/textColor2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

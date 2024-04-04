@@ -16,7 +16,7 @@ class NotificationReceiver : BroadcastReceiver() {
         val builder = NotificationCompat.Builder(context, "routineChannel")
             .setSmallIcon(R.drawable.baseline_circle_notifications_24)
             .setContentTitle("Routine Reminder")
-            .setContentText("$routineName")
+            .setContentText("15 min left for $routineName")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.VIBRATE) == PackageManager.PERMISSION_GRANTED) {
